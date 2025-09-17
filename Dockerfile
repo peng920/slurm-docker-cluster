@@ -1,4 +1,4 @@
-FROM rockylinux:8
+FROM rockylinux:9
 
 LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docker-cluster" \
       org.opencontainers.image.title="slurm-docker-cluster" \
@@ -7,11 +7,11 @@ LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docke
       maintainer="Giovanni Torres"
 
 RUN set -ex \
-    && yum makecache \
-    && yum -y update \
-    && yum -y install dnf-plugins-core \
-    && yum config-manager --set-enabled powertools \
-    && yum -y install \
+    && dnf makecache \
+    && dnf -y update \
+    && dnf -y install dnf-plugins-core epel-release \
+    && dnf config-manager --set-enabled crb \
+    && dnf -y install \
        wget \
        bzip2 \
        perl \
@@ -22,9 +22,8 @@ RUN set -ex \
        make \
        munge \
        munge-devel \
-       python3-devel \
-       python3-pip \
-       python3 \
+       python3.11 \
+       python3.11-pip \
        mariadb-server \
        mariadb-devel \
        psmisc \
@@ -32,12 +31,16 @@ RUN set -ex \
        vim-enhanced \
        http-parser-devel \
        json-c-devel \
-    && yum clean all \
-    && rm -rf /var/cache/yum
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
 
-RUN alternatives --set python /usr/bin/python3
+RUN alternatives --install /usr/bin/python python /usr/bin/python3.11 50
+RUN alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 50
 
-RUN pip3 install Cython pytest
+RUN alternatives --set python /usr/bin/python3.11
+RUN alternatives --set python3 /usr/bin/python3.11
+
+RUN python3 -m pip install Cython pytest
 
 ARG GOSU_VERSION=1.17
 

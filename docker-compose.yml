@@ -50,6 +50,7 @@ services:
 
   c1:
     image: slurm-docker-cluster:${IMAGE_TAG}
+    privileged: true
     command: ["slurmd"]
     hostname: c1
     container_name: c1
@@ -65,6 +66,7 @@ services:
 
   c2:
     image: slurm-docker-cluster:${IMAGE_TAG}
+    privileged: true
     command: ["slurmd"]
     hostname: c2
     container_name: c2
