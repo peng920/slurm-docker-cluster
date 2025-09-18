@@ -43,6 +43,8 @@ services:
       - ./var_log_slurm:/var/log/slurm
     expose:
       - "6817"
+    ports:
+      - "18001:18001"
     depends_on:
       - "slurmdbd"
     networks:
@@ -59,6 +61,7 @@ services:
       - ./var_log_slurm:/var/log/slurm
     expose:
       - "6818"
+      - "22"
     depends_on:
       - "slurmctld"
     networks:
@@ -75,6 +78,7 @@ services:
       - ./var_log_slurm:/var/log/slurm
     expose:
       - "6818"
+      - "22"
     depends_on:
       - "slurmctld"
     networks:
